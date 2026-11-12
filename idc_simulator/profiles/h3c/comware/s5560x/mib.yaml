@@ -1,0 +1,22 @@
+standard: [system, IF-MIB, LLDP-MIB, BRIDGE-MIB, Q-BRIDGE-MIB, IP-MIB, ENTITY-MIB, ENTITY-SENSOR-MIB, HOST-RESOURCES-MIB]
+private:
+  - oid: 1.3.6.1.4.1.25506.2.6.1.1.1.1.12.1
+    type: Integer32
+    sensor: temperature
+    source: 'HH3C-ENTITY-EXT-MIB hh3cEntityExtTemperature; H3C 03-设备管理 MIB 参考'
+  # IPIP 224 条模板反向缺口：CPU/内存取 resources；.19 被 fan_status_h3c 与
+  # power_status_h3c 两个指标共用（Zabbix 导入映射缺陷，采集侧必然同值），
+  # 仿真器只声明一次，按风扇传感器状态给值，并在文档中提示回 IPIP 侧修映射。
+  - oid: 1.3.6.1.4.1.25506.2.6.1.1.1.1.6.1
+    type: Integer32
+    field: cpu_percent
+    source: 'HH3C-OAM-MIB hh3cDevMgrCPUUtil (0..100); IPIP 模板 cpu_usage/unit=%'
+  - oid: 1.3.6.1.4.1.25506.2.6.1.1.1.1.8.1
+    type: Integer32
+    field: memory_percent
+    source: 'HH3C-OAM-MIB hh3cDevMgrMemoryUtil (0..100); IPIP 模板 memory_usage/unit=%'
+  - oid: 1.3.6.1.4.1.25506.2.6.1.1.1.1.19.1
+    type: Integer32
+    sensor: fan1
+    attribute: status
+    source: 'HH3C-ENTITY-EXT-MIB hh3cEntityExtErrorStatus; IPIP 模板 fan_status_h3c + power_status_h3c 共用该 OID，取风扇传感器 entPhySensorStatus'

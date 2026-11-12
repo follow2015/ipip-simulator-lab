@@ -1,0 +1,88 @@
+name: Release
+
+# 发布由 tag 触发：校验 tag/版本 → 构建 → **对构建出的 wheel 跑校验与冒烟** → 发布。
+#
+# 为什么测试跑在 wheel 上而不是源码树：`pip install -e .` 指向源码，打包配置
+# 写错（漏 package-data、漏子包、误收子目录）它照样全绿。用户拿到的是 wheel，
+# 只有装 wheel 再验，验的才是那份东西。
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: 构建、验证、发布
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # tag 注释会永久显示在 Release 页，是同步脚本之外唯一的公开文案入口
+      # （手工 `git tag -a -m` 不经过同步闸门）。按同一消息口径补一道。
+      # 取不到注释直接失败，避免轻量 tag 让这道闸形同虚设。
+      - name: 校验 tag 注释不含敏感信息
+        run: |
+          git fetch --tags --force --depth=1
+          message=$(git for-each-ref --format='%(contents)' "refs/tags/$GITHUB_REF_NAME")
+          test -n "$message" || { echo "❌ 未取到 tag 注释（请使用带 -m 的附注标签）"; exit 1; }
+          printf '%s\n' "$message" | python scripts/scan-secrets.py --stdin
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      # 不一致时产出的是"名叫 v1.2.0、内容是 1.1.0"的包：装上去很难察觉，
+      # 却让所有 issue 与回归都无法复现。判据在脚本里，本地也能先跑。
+      - name: 校验 tag 与包版本一致
+        run: python scripts/check_release_tag.py --tag "$GITHUB_REF_NAME"
+
+      - name: 构建 wheel
+        run: |
+          python -m pip install build
+          python -m build --wheel --outdir dist
+          ls -l dist/
+
+      - name: 校验 wheel 内容（模块清单 / 资产 / 未夹带）
+        run: python scripts/verify_wheel.py dist/*.whl
+
+      - name: 干净环境安装
+        shell: bash
+        run: |
+          python -m venv "$RUNNER_TEMP/release"
+          "$RUNNER_TEMP/release/bin/python" -m pip install dist/*.whl
+          cd "$RUNNER_TEMP"
+          "$RUNNER_TEMP/release/bin/python" -c "
+          import idc_simulator
+          assert 'site-packages' in idc_simulator.__file__, idc_simulator.__file__
+          print('import 自:', idc_simulator.__file__, '版本', idc_simulator.__version__)
+          "
+
+      - name: 端到端冒烟（装好的 wheel）
+        shell: bash
+        run: |
+          BIN="$RUNNER_TEMP/release/bin/idc-sim"
+          "$BIN" generate --devices 4 --ports 8 --output "$RUNNER_TEMP/topology.yaml"
+          test -f "$RUNNER_TEMP/topology.yaml"
+          "$BIN" network-plan "$RUNNER_TEMP/topology.yaml" > "$RUNNER_TEMP/plan.txt"
+          test -s "$RUNNER_TEMP/plan.txt"
+          echo "发布包冒烟通过"
+
+      - name: 上传构建产物
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+      # 用 runner 自带的 gh，少一个需要审的第三方 action。
+      # 链接必须用绝对地址：Release 页的 URL 是 /releases/tag/vX，相对路径
+      # `../blob/main/...` 会解析成 /releases/blob/...（实测 404）。
+      - name: 创建 GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" dist/* \
+            --title "$GITHUB_REF_NAME" \
+            --notes "变更见 [CHANGELOG.md](${{ github.server_url }}/${{ github.repository }}/blob/main/CHANGELOG.md)。" \
+            --verify-tag

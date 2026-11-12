@@ -1,0 +1,7 @@
+brand: juniper
+series: junos
+model: demo
+version: '1.0.0'
+sys_object_id: 1.3.6.1.4.1.2636
+sys_descr: 'Junos behavioral demo (unverified model)'
+source: https://www.juniper.net/documentation/

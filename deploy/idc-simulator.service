@@ -1,0 +1,19 @@
+[Unit]
+Description=IDC state-driven protocol simulator
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/idc-simulator
+EnvironmentFile=/etc/idc-simulator.env
+ExecStart=/opt/idc-simulator/.venv/bin/idc-sim serve --mode namespace --topology /etc/idc-simulator/topology.yaml --state-dir /var/lib/idc-simulator --worker-uid ${IDC_WORKER_UID}
+Restart=on-failure
+RestartSec=3
+TimeoutStopSec=60
+KillMode=control-group
+UMask=0077
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,8 @@
+standard: [coldStart, warmStart, linkDown, linkUp, authenticationFailure]
+private:
+  sensorAlarm:
+    oid: 1.3.6.1.4.1.9.9.91.2.0.1
+    source: 'CISCO-ENTITY-SENSOR-MIB entSensorThresholdNotification (sensor value crossed threshold)'
+  sensorClear:
+    oid: 1.3.6.1.4.1.9.9.91.2.0.1
+    source: 'CISCO-ENTITY-SENSOR-MIB entSensorThresholdNotification; 同一通知覆盖升/降阈值，恢复由 varbind 值区分'

@@ -1,0 +1,5 @@
+coverage: behavioral-demo
+collector_verified: false
+private_mib_verified: false
+implemented: [standard-mib, queries, control-api-configuration, save-reboot, scenarios]
+limitations: [vendor-output-fixtures-required, private-mib-not-implemented]

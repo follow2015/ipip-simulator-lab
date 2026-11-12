@@ -1,0 +1,3 @@
+interface_count: 64
+speed_bps: 100000000000
+mac_aging_seconds: 300

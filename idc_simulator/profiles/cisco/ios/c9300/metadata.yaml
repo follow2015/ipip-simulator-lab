@@ -1,0 +1,7 @@
+brand: cisco
+series: ios
+model: c9300
+version: '1.0.0'
+sys_object_id: 1.3.6.1.4.1.9.1.2494
+sys_descr: 'Cisco IOS XE Software, Version 17.09.04a, Catalyst C9300'
+source: scripts/lab/sim/gen_profiles.py

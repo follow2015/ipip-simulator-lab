@@ -1,0 +1,5 @@
+coverage: behavioral-demo
+collector_verified: false
+private_mib_verified: false
+implemented: [standard-mib, entity-sensor-mib, host-resources-mib, vendor-private-mib, queries, configuration, save-reboot, scenarios, sensor-threshold-traps]
+limitations: [vendor-output-fixtures-required, private-oids-from-vendor-docs-not-device-fixtures]

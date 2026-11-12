@@ -1,0 +1,5 @@
+coverage: behavioral-demo
+collector_verified: false
+private_mib_verified: false
+implemented: [standard-mib, queries, configuration, save-reboot, scenarios]
+limitations: [generic-hardware-identity, vrp-style-cli-only, no-private-mib, no-real-packet-forwarding]

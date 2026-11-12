@@ -1,0 +1,176 @@
+name: ci
+
+# 同一份工作流同时服务两个仓：开发仓（私有）与部署仓（公开）。
+# 两仓的测试范围一致（tests/simulator），所以命令不做分支判断 ——
+# 一旦某仓漏发文件，期望它**变红**，而不是被 `if` 静默跳过。
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+env:
+  PIP_DISABLE_PIP_VERSION_CHECK: "1"
+
+jobs:
+  gate:
+    name: 门禁（lint / 机密 / 版本）
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: 安装（含开发依赖）
+        run: python -m pip install -e ".[test,dev]"
+
+      - name: 组件清单（解析后的确切版本）
+        run: |
+          python -V
+          python -m pip list --format=freeze | sort
+
+      - name: Lint（ruff 正确性规则）
+        run: python -m ruff check idc_simulator tests tools
+
+      - name: 前端语法
+        run: node --check idc_simulator/web/app.js
+
+      - name: 语法检查（compileall）
+        run: python -m compileall -q idc_simulator tools tests
+
+      # 公开仓的最后一道闸：发现疑似机密即红。**先扫后发**，不在部署仓里
+      # 留半成品（同步脚本对 HEAD 快照树扫描后才会写入）。
+      - name: 机密扫描
+        run: python scripts/scan-secrets.py $(git ls-files)
+
+      # 只查内部一致性：版本必须只有一个源（__init__.__version__），
+      # pyproject 必须是 dynamic，源码里不得再有第二处硬编码。
+      - name: 版本声明形态
+        run: python scripts/check_release_tag.py --no-tag
+
+  test:
+    name: test (py${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # 只验两端：3.11 = requires-python 下限，3.13 = 开发基线。
+        # 中间版本不铺满 —— 语法差异由 compileall/ruff 覆盖，而"依赖在某个
+        # 解释器上根本装不上"这类问题只会在两端暴露。
+        python-version: ["3.11", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: 安装
+        run: python -m pip install -e ".[test,dev]"
+
+      - name: 组件清单（解析后的确切版本）
+        run: |
+          python -V
+          python -m pip list --format=freeze | sort
+
+      # 不写死 tests/simulator：开发仓还有 tests/lab 与 tests/release（发布工具
+      # 测试），公开仓只同步 tests/simulator。全仓收集两边都成立，也避免"某个
+      # 目录没被任何工作流跑到"这种漏测。
+      - name: pytest
+        run: python -m pytest -q --junitxml=test-results.xml
+
+      - name: 上传测试报告
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-py${{ matrix.python-version }}
+          path: test-results.xml
+
+  signature-verify:
+    name: 增量签名一致性（verify）
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: 安装
+        run: python -m pip install -e ".[test,dev]"
+
+      - name: 全量测试（校验增量签名与完整重算一致）
+        env:
+          IDC_SIGNATURE_MODE: verify
+        run: python -m pytest -q
+
+  wheel:
+    name: wheel 构建 + 干净环境冒烟
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: 构建 wheel
+        run: |
+          python -m pip install build
+          python -m build --wheel --outdir dist
+          ls -l dist/
+
+      # `pip install -e .` 不读 wheel，打包配置写错它照样全绿。
+      # 唯一判据是"wheel 模块清单 == 源码树清单 + 资产齐全 + 不夹带"。
+      - name: 校验 wheel 内容
+        run: python scripts/verify_wheel.py dist/*.whl
+
+      - name: 干净环境安装并冒烟
+        shell: bash
+        run: |
+          python -m venv "$RUNNER_TEMP/clean"
+          "$RUNNER_TEMP/clean/bin/python" -m pip install dist/*.whl
+          # 必须离开仓库根：`python -c` 会把 cwd 塞进 sys.path，
+          # 在仓库根跑会 import 到源码树，等于没验打包。
+          cd "$RUNNER_TEMP"
+          "$RUNNER_TEMP/clean/bin/python" -c "
+          import idc_simulator
+          assert 'site-packages' in idc_simulator.__file__, idc_simulator.__file__
+          print('import 自:', idc_simulator.__file__, '版本', idc_simulator.__version__)
+          "
+          BIN="$RUNNER_TEMP/clean/bin/idc-sim"
+          "$BIN" generate --devices 4 --ports 8 --output "$RUNNER_TEMP/topology.yaml"
+          test -f "$RUNNER_TEMP/topology.yaml"
+          "$BIN" network-plan "$RUNNER_TEMP/topology.yaml" > "$RUNNER_TEMP/plan.txt"
+          test -s "$RUNNER_TEMP/plan.txt"
+          echo "干净环境冒烟通过"
+
+      - name: 上传 wheel
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+  linux-namespace:
+    name: Linux namespace / UDP161 / SSH22 / setuid
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: 安装协议依赖与网络工具
+        run: |
+          python -m venv /tmp/idc-ci-venv
+          /tmp/idc-ci-venv/bin/python -m pip install -e ".[test,dev]"
+          sudo apt-get update
+          sudo apt-get install -y iproute2 util-linux
+      - name: 实际 namespace 与降权验收
+        run: sudo env IDC_LINUX_INTEGRATION=1 /tmp/idc-ci-venv/bin/python -m pytest tests/simulator/test_linux_namespace.py -q --junitxml=/tmp/linux-namespace-results.xml
+      - name: 上传 Linux 验收报告
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-namespace-results
+          path: /tmp/linux-namespace-results.xml

@@ -1,0 +1,50 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "idc-simulator"
+# 版本号唯一源是 idc_simulator/__init__.py::__version__（见 scripts/check_release_tag.py）。
+# 这里刻意不写死：同一版本曾经在 pyproject / __init__ / runtime 三处各写一遍，
+# 任何一处漏改都会产出"名字与内容不一致"的包，而这在装机后极难察觉。
+dynamic = ["version"]
+description = "State-driven IDC management protocol simulator"
+requires-python = ">=3.11"
+dependencies = ["pysnmp==7.1.30", "asyncssh==2.23.0", "PyYAML==6.0.3", "aiohttp==3.13.2"]
+
+[project.optional-dependencies]
+test = ["pytest==9.0.2", "pytest-asyncio==1.3.0"]
+dev = ["ruff==0.17.4"]
+
+[project.scripts]
+idc-sim = "idc_simulator.__main__:main"
+
+[tool.ruff]
+line-length = 220
+target-version = "py311"
+extend-exclude = ["build", "dist", ".venv", "scripts"]
+
+[tool.ruff.lint]
+# Correctness gate: syntax/statement errors, unused imports and undefined names.
+# Style rules stay out so the review gate reports defects, not formatting taste.
+select = ["E4", "E9", "F"]
+ignore = ["F541"]
+
+[tool.ruff.lint.per-file-ignores]
+# pytest injects fixtures by name, which reads as a redefinition to ruff.
+"tests/**" = ["F811"]
+
+[tool.setuptools.dynamic]
+version = {attr = "idc_simulator.__version__"}
+
+[tool.setuptools.packages.find]
+include = ["idc_simulator*"]
+
+[tool.setuptools.package-data]
+idc_simulator = ["profiles/**/*.yaml", "web/*.html", "web/*.css", "web/*.js"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+markers = ["unit: offline unit assertions", "integration: protocol or external integration assertions", "lab: requires external legacy laboratory"]
+

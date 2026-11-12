@@ -1,0 +1,41 @@
+schema_version: 1
+name: local-demo
+seed: 20261109
+management:
+  subnet: 127.0.0.0/8
+  gateway: 127.0.0.254
+  attachment: loopback
+devices:
+  - id: sw-a
+    profile: cisco/ios/c9300
+    management_ip: 127.0.0.1
+    hostname: IDC-DEMO
+    vlans: [100]
+    interfaces:
+      - {id: p1, name: GigabitEthernet1/0/1, ifindex: 10, bridge_port: 1, lldp_port: 7}
+      - {id: p2, name: GigabitEthernet1/0/2, ifindex: 20, bridge_port: 2, lldp_port: 8}
+    l3_interfaces:
+      - {id: vlan100, vlan: 100, address: 192.0.2.1/24, vrf: default}
+    # 与生产拓扑 examples/idc-100.yaml 同构：resources 供 CPU/内存私有 OID，
+    # 传感器带 value/status 供厂商 state 枚举 OID 取值，避免任何占位值。
+    resources: {cpu_percent: 12, memory_total: 1048576, memory_used: 314572, memory_percent: 30}
+    sensors:
+      - {id: temperature, index: 100, name: Chassis temperature, value: 35, type: 8, status: 1, units: Celsius, threshold: 80, clear_threshold: 70}
+      - {id: fan1, index: 101, name: Fan tray 1, type: 10, value: 4800, status: 1, units: rpm, threshold: 9000, clear_threshold: 8000, low_threshold: 1000, low_clear: 3000}
+      - {id: power1, index: 102, name: PSU 1, type: 12, value: 1, status: 1, units: ''}
+hosts:
+  - {id: host-a, device: sw-a, interface: p1, mac: '02:00:00:00:01:01', address: 192.0.2.10/24, vlan: 100, active: true}
+  - {id: host-b, device: sw-a, interface: p2, mac: '02:00:00:00:01:02', address: 192.0.2.11/24, vlan: 100, active: true}
+flows:
+  - {id: demo, source: host-a, destination: host-b, rate_bps: 8000000, packet_size: 1000}
+scenarios:
+  flap:
+    schema_version: 1
+    seed: 20261109
+    steps:
+      - at: 0
+        device: sw-a
+        operations: [{kind: interface, port: p1, fields: {admin: false}}]
+      - at: 2
+        device: sw-a
+        operations: [{kind: interface, port: p1, fields: {admin: true}}]

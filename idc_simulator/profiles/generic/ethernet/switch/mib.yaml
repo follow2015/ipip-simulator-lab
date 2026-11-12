@@ -1,0 +1,2 @@
+standard: [system, IF-MIB, LLDP-MIB, BRIDGE-MIB, Q-BRIDGE-MIB, IP-MIB, ENTITY-MIB, ENTITY-SENSOR-MIB]
+private: []

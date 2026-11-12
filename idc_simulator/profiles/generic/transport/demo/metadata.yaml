@@ -1,0 +1,7 @@
+brand: generic
+series: transport
+model: demo
+version: '1.0.0'
+sys_object_id: 1.3.6.1.4.1.8072
+sys_descr: 'Generic optical transport simulator'
+source: docs/design/idc-device-simulator-design.md

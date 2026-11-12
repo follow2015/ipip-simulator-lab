@@ -1,0 +1,7 @@
+brand: cisco
+series: nxos
+model: demo
+version: '1.0.0'
+sys_object_id: 1.3.6.1.4.1.9
+sys_descr: 'Cisco NX-OS behavioral demo (unverified model)'
+source: https://www.cisco.com/

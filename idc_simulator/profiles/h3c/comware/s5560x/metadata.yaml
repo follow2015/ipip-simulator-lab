@@ -1,0 +1,7 @@
+brand: h3c
+series: comware
+model: s5560x
+version: '1.0.0'
+sys_object_id: 1.3.6.1.4.1.25506.11.1.196
+sys_descr: 'H3C Comware Software, Version 7.1.070, S5560X'
+source: scripts/lab/sim/gen_profiles.py

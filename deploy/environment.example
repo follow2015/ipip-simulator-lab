@@ -1,0 +1,23 @@
+# Supply environment through /etc/idc-simulator.env (mode 0600).
+# Replace every value before connecting an external collector.
+IDC_WORKER_UID=991
+IDC_API_TOKEN=replace-with-control-api-token
+IDC_SNMP_COMMUNITY=sim-read
+IDC_SNMP_WRITE_COMMUNITY=sim-write
+IDC_SNMP_V3_USER=sim-user
+IDC_SNMP_V3_AUTH=replace-with-auth-password
+IDC_SNMP_V3_PRIV=replace-with-priv-password
+IDC_SSH_USER=sim
+IDC_SSH_PASSWORD=replace-with-ssh-password
+# JSON; traps use the device management IP as source.
+IDC_NOTIFICATION_TARGETS=[]
+IDC_CREDENTIAL_SETS={}
+# HTTPS reverse proxy: preserve Host and set exact external browser origins.
+# IDC_ALLOWED_HOSTS=sim.example
+# IDC_ALLOWED_ORIGINS=https://sim.example
+# State signature mode (incremental | full | verify). Leave unset for the default;
+# do not assign the same variable twice in this file, later lines win.
+# IDC_SIGNATURE_MODE=incremental
+# Bounded shutdown and lab lifecycle waits (seconds).
+# IDC_LIFECYCLE_TIMEOUT=300
+# IDC_SHUTDOWN_TIMEOUT=60

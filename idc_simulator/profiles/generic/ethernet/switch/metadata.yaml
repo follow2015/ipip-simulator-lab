@@ -1,0 +1,7 @@
+brand: generic
+series: ethernet
+model: switch
+version: '1.0.0'
+sys_object_id: 1.3.6.1.4.1.8072.3.2.255
+sys_descr: 'IDC simulator generic Ethernet switch; configured port inventory; VRP-style behavioral CLI'
+source: idc_simulator/idc_lab.py

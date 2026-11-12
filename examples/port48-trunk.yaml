@@ -1,0 +1,439 @@
+schema_version: 1
+name: p48-p48
+seed: 20261109
+management:
+  subnet: 10.200.0.0/24
+  gateway: 10.200.0.1
+  attachment: routed-bridge
+devices:
+- id: sw-001
+  profile: cisco/ios/c9300
+  management_ip: 10.200.0.11
+  hostname: sw-001
+  interfaces:
+  - id: p1
+    name: GigabitEthernet1/0/1
+    ifindex: 1
+    speed_bps: 1000000000
+  - id: p2
+    name: GigabitEthernet1/0/2
+    ifindex: 2
+    speed_bps: 1000000000
+  - id: p3
+    name: GigabitEthernet1/0/3
+    ifindex: 3
+    speed_bps: 1000000000
+  - id: p4
+    name: GigabitEthernet1/0/4
+    ifindex: 4
+    speed_bps: 1000000000
+  - id: p5
+    name: GigabitEthernet1/0/5
+    ifindex: 5
+    speed_bps: 1000000000
+  - id: p6
+    name: GigabitEthernet1/0/6
+    ifindex: 6
+    speed_bps: 1000000000
+  - id: p7
+    name: GigabitEthernet1/0/7
+    ifindex: 7
+    speed_bps: 1000000000
+  - id: p8
+    name: GigabitEthernet1/0/8
+    ifindex: 8
+    speed_bps: 1000000000
+  - id: p9
+    name: GigabitEthernet1/0/9
+    ifindex: 9
+    speed_bps: 1000000000
+  - id: p10
+    name: GigabitEthernet1/0/10
+    ifindex: 10
+    speed_bps: 1000000000
+  - id: p11
+    name: GigabitEthernet1/0/11
+    ifindex: 11
+    speed_bps: 1000000000
+  - id: p12
+    name: GigabitEthernet1/0/12
+    ifindex: 12
+    speed_bps: 1000000000
+  - id: p13
+    name: GigabitEthernet1/0/13
+    ifindex: 13
+    speed_bps: 1000000000
+  - id: p14
+    name: GigabitEthernet1/0/14
+    ifindex: 14
+    speed_bps: 1000000000
+  - id: p15
+    name: GigabitEthernet1/0/15
+    ifindex: 15
+    speed_bps: 1000000000
+  - id: p16
+    name: GigabitEthernet1/0/16
+    ifindex: 16
+    speed_bps: 1000000000
+  - id: p17
+    name: GigabitEthernet1/0/17
+    ifindex: 17
+    speed_bps: 1000000000
+  - id: p18
+    name: GigabitEthernet1/0/18
+    ifindex: 18
+    speed_bps: 1000000000
+  - id: p19
+    name: GigabitEthernet1/0/19
+    ifindex: 19
+    speed_bps: 1000000000
+  - id: p20
+    name: GigabitEthernet1/0/20
+    ifindex: 20
+    speed_bps: 1000000000
+  - id: p21
+    name: GigabitEthernet1/0/21
+    ifindex: 21
+    speed_bps: 1000000000
+  - id: p22
+    name: GigabitEthernet1/0/22
+    ifindex: 22
+    speed_bps: 1000000000
+  - id: p23
+    name: GigabitEthernet1/0/23
+    ifindex: 23
+    speed_bps: 1000000000
+  - id: p24
+    name: GigabitEthernet1/0/24
+    ifindex: 24
+    speed_bps: 1000000000
+  - id: p25
+    name: GigabitEthernet1/0/25
+    ifindex: 25
+    speed_bps: 1000000000
+  - id: p26
+    name: GigabitEthernet1/0/26
+    ifindex: 26
+    speed_bps: 1000000000
+  - id: p27
+    name: GigabitEthernet1/0/27
+    ifindex: 27
+    speed_bps: 1000000000
+  - id: p28
+    name: GigabitEthernet1/0/28
+    ifindex: 28
+    speed_bps: 1000000000
+  - id: p29
+    name: GigabitEthernet1/0/29
+    ifindex: 29
+    speed_bps: 1000000000
+  - id: p30
+    name: GigabitEthernet1/0/30
+    ifindex: 30
+    speed_bps: 1000000000
+  - id: p31
+    name: GigabitEthernet1/0/31
+    ifindex: 31
+    speed_bps: 1000000000
+  - id: p32
+    name: GigabitEthernet1/0/32
+    ifindex: 32
+    speed_bps: 1000000000
+  - id: p33
+    name: GigabitEthernet1/0/33
+    ifindex: 33
+    speed_bps: 1000000000
+  - id: p34
+    name: GigabitEthernet1/0/34
+    ifindex: 34
+    speed_bps: 1000000000
+  - id: p35
+    name: GigabitEthernet1/0/35
+    ifindex: 35
+    speed_bps: 1000000000
+  - id: p36
+    name: GigabitEthernet1/0/36
+    ifindex: 36
+    speed_bps: 1000000000
+  - id: p37
+    name: GigabitEthernet1/0/37
+    ifindex: 37
+    speed_bps: 1000000000
+  - id: p38
+    name: GigabitEthernet1/0/38
+    ifindex: 38
+    speed_bps: 1000000000
+  - id: p39
+    name: GigabitEthernet1/0/39
+    ifindex: 39
+    speed_bps: 1000000000
+  - id: p40
+    name: GigabitEthernet1/0/40
+    ifindex: 40
+    speed_bps: 1000000000
+  - id: p41
+    name: GigabitEthernet1/0/41
+    ifindex: 41
+    speed_bps: 1000000000
+  - id: p42
+    name: GigabitEthernet1/0/42
+    ifindex: 42
+    speed_bps: 1000000000
+  - id: p43
+    name: GigabitEthernet1/0/43
+    ifindex: 43
+    speed_bps: 1000000000
+  - id: p44
+    name: GigabitEthernet1/0/44
+    ifindex: 44
+    speed_bps: 1000000000
+  - id: p45
+    name: GigabitEthernet1/0/45
+    ifindex: 45
+    speed_bps: 1000000000
+  - id: p46
+    name: GigabitEthernet1/0/46
+    ifindex: 46
+    speed_bps: 1000000000
+  - id: p47
+    name: GigabitEthernet1/0/47
+    ifindex: 47
+    speed_bps: 1000000000
+  - id: p48
+    name: GigabitEthernet1/0/48
+    ifindex: 48
+    speed_bps: 1000000000
+  vlans:
+  - 100
+  l3_interfaces:
+  - id: vlan100
+    vlan: 100
+    address: 192.0.2.1/24
+- id: sw-002
+  profile: huawei/vrp/s5735
+  management_ip: 10.200.0.12
+  hostname: sw-002
+  interfaces:
+  - id: p1
+    name: GigabitEthernet1/0/1
+    ifindex: 1
+    speed_bps: 1000000000
+  - id: p2
+    name: GigabitEthernet1/0/2
+    ifindex: 2
+    speed_bps: 1000000000
+  - id: p3
+    name: GigabitEthernet1/0/3
+    ifindex: 3
+    speed_bps: 1000000000
+  - id: p4
+    name: GigabitEthernet1/0/4
+    ifindex: 4
+    speed_bps: 1000000000
+  - id: p5
+    name: GigabitEthernet1/0/5
+    ifindex: 5
+    speed_bps: 1000000000
+  - id: p6
+    name: GigabitEthernet1/0/6
+    ifindex: 6
+    speed_bps: 1000000000
+  - id: p7
+    name: GigabitEthernet1/0/7
+    ifindex: 7
+    speed_bps: 1000000000
+  - id: p8
+    name: GigabitEthernet1/0/8
+    ifindex: 8
+    speed_bps: 1000000000
+  - id: p9
+    name: GigabitEthernet1/0/9
+    ifindex: 9
+    speed_bps: 1000000000
+  - id: p10
+    name: GigabitEthernet1/0/10
+    ifindex: 10
+    speed_bps: 1000000000
+  - id: p11
+    name: GigabitEthernet1/0/11
+    ifindex: 11
+    speed_bps: 1000000000
+  - id: p12
+    name: GigabitEthernet1/0/12
+    ifindex: 12
+    speed_bps: 1000000000
+  - id: p13
+    name: GigabitEthernet1/0/13
+    ifindex: 13
+    speed_bps: 1000000000
+  - id: p14
+    name: GigabitEthernet1/0/14
+    ifindex: 14
+    speed_bps: 1000000000
+  - id: p15
+    name: GigabitEthernet1/0/15
+    ifindex: 15
+    speed_bps: 1000000000
+  - id: p16
+    name: GigabitEthernet1/0/16
+    ifindex: 16
+    speed_bps: 1000000000
+  - id: p17
+    name: GigabitEthernet1/0/17
+    ifindex: 17
+    speed_bps: 1000000000
+  - id: p18
+    name: GigabitEthernet1/0/18
+    ifindex: 18
+    speed_bps: 1000000000
+  - id: p19
+    name: GigabitEthernet1/0/19
+    ifindex: 19
+    speed_bps: 1000000000
+  - id: p20
+    name: GigabitEthernet1/0/20
+    ifindex: 20
+    speed_bps: 1000000000
+  - id: p21
+    name: GigabitEthernet1/0/21
+    ifindex: 21
+    speed_bps: 1000000000
+  - id: p22
+    name: GigabitEthernet1/0/22
+    ifindex: 22
+    speed_bps: 1000000000
+  - id: p23
+    name: GigabitEthernet1/0/23
+    ifindex: 23
+    speed_bps: 1000000000
+  - id: p24
+    name: GigabitEthernet1/0/24
+    ifindex: 24
+    speed_bps: 1000000000
+  - id: p25
+    name: GigabitEthernet1/0/25
+    ifindex: 25
+    speed_bps: 1000000000
+  - id: p26
+    name: GigabitEthernet1/0/26
+    ifindex: 26
+    speed_bps: 1000000000
+  - id: p27
+    name: GigabitEthernet1/0/27
+    ifindex: 27
+    speed_bps: 1000000000
+  - id: p28
+    name: GigabitEthernet1/0/28
+    ifindex: 28
+    speed_bps: 1000000000
+  - id: p29
+    name: GigabitEthernet1/0/29
+    ifindex: 29
+    speed_bps: 1000000000
+  - id: p30
+    name: GigabitEthernet1/0/30
+    ifindex: 30
+    speed_bps: 1000000000
+  - id: p31
+    name: GigabitEthernet1/0/31
+    ifindex: 31
+    speed_bps: 1000000000
+  - id: p32
+    name: GigabitEthernet1/0/32
+    ifindex: 32
+    speed_bps: 1000000000
+  - id: p33
+    name: GigabitEthernet1/0/33
+    ifindex: 33
+    speed_bps: 1000000000
+  - id: p34
+    name: GigabitEthernet1/0/34
+    ifindex: 34
+    speed_bps: 1000000000
+  - id: p35
+    name: GigabitEthernet1/0/35
+    ifindex: 35
+    speed_bps: 1000000000
+  - id: p36
+    name: GigabitEthernet1/0/36
+    ifindex: 36
+    speed_bps: 1000000000
+  - id: p37
+    name: GigabitEthernet1/0/37
+    ifindex: 37
+    speed_bps: 1000000000
+  - id: p38
+    name: GigabitEthernet1/0/38
+    ifindex: 38
+    speed_bps: 1000000000
+  - id: p39
+    name: GigabitEthernet1/0/39
+    ifindex: 39
+    speed_bps: 1000000000
+  - id: p40
+    name: GigabitEthernet1/0/40
+    ifindex: 40
+    speed_bps: 1000000000
+  - id: p41
+    name: GigabitEthernet1/0/41
+    ifindex: 41
+    speed_bps: 1000000000
+  - id: p42
+    name: GigabitEthernet1/0/42
+    ifindex: 42
+    speed_bps: 1000000000
+  - id: p43
+    name: GigabitEthernet1/0/43
+    ifindex: 43
+    speed_bps: 1000000000
+  - id: p44
+    name: GigabitEthernet1/0/44
+    ifindex: 44
+    speed_bps: 1000000000
+  - id: p45
+    name: GigabitEthernet1/0/45
+    ifindex: 45
+    speed_bps: 1000000000
+  - id: p46
+    name: GigabitEthernet1/0/46
+    ifindex: 46
+    speed_bps: 1000000000
+  - id: p47
+    name: GigabitEthernet1/0/47
+    ifindex: 47
+    speed_bps: 1000000000
+  - id: p48
+    name: GigabitEthernet1/0/48
+    ifindex: 48
+    speed_bps: 1000000000
+  vlans:
+  - 100
+links:
+- id: a48-b48
+  endpoints:
+  - sw-001:p48
+  - sw-002:p48
+  mode: trunk
+  allowed_vlans:
+  - 100
+hosts:
+- id: host-1
+  device: sw-001
+  interface: p1
+  mac: 02:00:00:01:00:00
+  address: 192.0.2.10/24
+  vlan: 100
+  active: true
+- id: host-2
+  device: sw-002
+  interface: p1
+  mac: 02:00:00:01:00:01
+  address: 192.0.2.11/24
+  vlan: 100
+  active: true
+flows:
+- id: baseline
+  source: host-1
+  destination: host-2
+  rate_bps: 10000000
+  packet_size: 1000

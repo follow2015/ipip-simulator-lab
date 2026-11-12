@@ -1,0 +1,8 @@
+standard: [coldStart, warmStart, linkDown, linkUp, authenticationFailure]
+private:
+  sensorAlarm:
+    oid: 1.3.6.1.4.1.2011.5.25.219.2.10.13
+    source: '华为 ALM-4287373386 hwBrdTempAlarm / ENTITYTRAP ENTITYBRDTEMPALARM'
+  sensorClear:
+    oid: 1.3.6.1.4.1.2011.5.25.219.2.10.13
+    source: '华为官方文档未给独立清除 OID；复用告警 OID，恢复由 varbind 的当前温度/阈值区分'

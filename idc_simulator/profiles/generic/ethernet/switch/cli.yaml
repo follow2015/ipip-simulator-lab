@@ -1,0 +1,3 @@
+family: vrp
+semantics: immediate
+queries: [version, interfaces, lldp, arp, fdb, running, startup, vlans, routes]

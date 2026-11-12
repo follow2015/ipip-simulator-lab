@@ -1,0 +1,29 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+*.egg-info/
+build/
+dist/
+.sim/
+*.db
+*.db-wal
+*.db-shm
+
+# macOS Finder 元数据：本地噪声，与内容无关
+.DS_Store
+
+.sim-web/
+
+# 部署仓（sync_to_deploy.py 的目标，独立 git 仓，不进主仓）
+ipip-simulator-lab-deploy/
+
+# AI 项目记忆：本地上下文，不是产品资产
+.workbuddy/
+
+# 部署仓的历史备份（重建公开仓时保留，仅本地）
+.deploy-backup-*/
+
+# 浏览器验收工具链（本地开发期依赖，非产品资产）
+tools/node_modules/
+tools/package-lock.json

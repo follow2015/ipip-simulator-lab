@@ -1,0 +1,32 @@
+standard: [system, IF-MIB, LLDP-MIB, BRIDGE-MIB, Q-BRIDGE-MIB, IP-MIB, ENTITY-MIB, ENTITY-SENSOR-MIB, HOST-RESOURCES-MIB]
+private:
+  - oid: 1.3.6.1.4.1.9.9.13.1.3.1.3.1
+    type: Gauge32
+    sensor: temperature
+    source: 'CISCO-ENVMON-MIB ciscoEnvMonTemperatureStatusValue; IPIP snmp_adapter 已引用该 OID'
+  # 以下 5 条来自 IPIP 224 条 SNMP 模板的反向缺口（scripts/verify_mib_claims.py
+  # gap.not_simulated）。每条都带真实值来源：field 取 resources，sensor+attribute
+  # 取运行时传感器属性；不填 0/占位/随机值，避免「假完备」。
+  - oid: 1.3.6.1.4.1.9.9.109.1.1.1.1.6.1
+    type: Gauge32
+    field: cpu_percent
+    source: 'CISCO-PROCESS-MIB cpmCPUTotal5secRev (0..100); IPIP 模板 cpu_usage/unit=%'
+  - oid: 1.3.6.1.4.1.9.9.48.1.1.1.5.1
+    type: Gauge32
+    field: memory_percent
+    source: 'CISCO-MEMORY-POOL-MIB ciscoMemoryPoolUsed; IPIP 模板 memory_usage/unit=% 按百分比消费，故取派生 memory_percent 而非原始 used bytes（语义差异已记录）'
+  - oid: 1.3.6.1.4.1.9.9.13.1.3.1.2.1
+    type: Integer32
+    sensor: temperature
+    attribute: status
+    source: 'CISCO-ENVMON-MIB ciscoEnvMonTemperatureStatus (INTEGER normal=1/warning=2/critical=3); 取温度传感器的 entPhySensorStatus'
+  - oid: 1.3.6.1.4.1.9.9.13.1.4.1.2.1
+    type: Integer32
+    sensor: fan1
+    attribute: status
+    source: 'CISCO-ENVMON-MIB ciscoEnvMonFanStatus (INTEGER 枚举); IPIP 模板 fan_speed/state，取风扇传感器状态'
+  - oid: 1.3.6.1.4.1.9.9.13.1.5.1.2.1
+    type: Integer32
+    sensor: power1
+    attribute: status
+    source: 'CISCO-ENVMON-MIB ciscoEnvMonSupplyStatus (INTEGER 枚举); IPIP 模板 power_supply/state，取电源传感器状态'
